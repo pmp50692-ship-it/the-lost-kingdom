@@ -22,6 +22,7 @@ jobs:
           mkdir -p /tmp/godot-templates
           unzip -q /tmp/godot-templates.tpz -d /tmp/godot-templates
           cp -a /tmp/godot-templates/templates/. "$HOME/.local/share/godot/export_templates/4.3.stable/"
+          if [ -f /tmp/godot-templates/version.txt ]; then cp /tmp/godot-templates/version.txt "$HOME/.local/share/godot/export_templates/4.3.stable/version.txt"; fi
           ls -lh "$HOME/.local/share/godot/export_templates/4.3.stable/android_debug.apk"
           mkdir -p /root/.android
           keytool -genkeypair -v -keystore /root/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
