@@ -14,21 +14,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare Godot export templates and settings
+      - name: Configure Godot Android SDK paths
         run: |
-          mkdir -p ~/.local/share/godot/export_templates/
-          mkdir -p ~/.config/
-          if [ -d /root/.config/godot ]; then
-            cp -a /root/.config/godot ~/.config/
-          fi
-          if [ -d /root/.local/share/godot/export_templates/4.3.stable ]; then
-            cp -a /root/.local/share/godot/export_templates/4.3.stable ~/.local/share/godot/export_templates/
-          fi
+          mkdir -p "$HOME/.config/godot"
+          cat > "$HOME/.config/godot/editor_settings-4.3.tres" <<'EOF'
+          [gd_resource type="EditorSettings" format=3]
 
-      - name: Create temporary Android debug keystore
-        run: |
+          [resource]
+          export/android/java_sdk_path = "/usr/lib/jvm/java-17-openjdk-amd64"
+          export/android/android_sdk_path = "/usr/lib/android-sdk"
+          export/android/debug_keystore = "/root/.android/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/force_system_user = false
+          export/android/timestamping_authority_url = ""
+          EOF
           mkdir -p /root/.android
           keytool -genkeypair -v -keystore /root/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          echo "HOME=$HOME"
+          java -version
+          test -x /usr/lib/android-sdk/platform-tools/adb
+          ls -la /usr/lib/android-sdk/build-tools
+          ls -la /usr/lib/android-sdk/platforms
+          ls -la /usr/lib/jvm/java-17-openjdk-amd64/bin/java
 
       - name: Export Android APK
         run: |
