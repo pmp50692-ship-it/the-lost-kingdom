@@ -36,6 +36,11 @@ jobs:
           test -n "$SDKMANAGER"
           yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses
           "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "build-tools;34.0.0" "platforms;android-34" "cmdline-tools;latest" "cmake;3.10.2.4988404" "ndk;23.2.8568313"
+          if [ ! -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" ]; then
+            mkdir -p "$ANDROID_HOME/cmdline-tools/latest"
+            cp -a "$(dirname "$(dirname "$SDKMANAGER")")/." "$ANDROID_HOME/cmdline-tools/latest/"
+          fi
+          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           ls -la "$ANDROID_HOME/build-tools"
           ls -la "$ANDROID_HOME/platforms"
 
@@ -64,6 +69,9 @@ jobs:
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
           ANDROID_HOME: /usr/lib/android-sdk
           ANDROID_SDK_ROOT: /usr/lib/android-sdk
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: /root/.android/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
         run: |
           set -eux
           test -x "$JAVA_HOME/bin/java"
