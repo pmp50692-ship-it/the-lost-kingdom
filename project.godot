@@ -1,0 +1,18 @@
+; THE LOST KINGDOM - Godot 4 Android prototype
+config_version=5
+
+[application]
+config/name="The Lost Kingdom"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+config/description="A 3D third-person adventure in an ancient Indian kingdom."
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.12, 0.16, 0.2, 1)
