@@ -28,7 +28,14 @@ jobs:
           keytool -genkeypair -v -keystore /root/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
       - name: Export Android APK
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+          ANDROID_HOME: /usr/lib/android-sdk
+          ANDROID_SDK_ROOT: /usr/lib/android-sdk
         run: |
+          set -eux
+          test -x "$JAVA_HOME/bin/java"
+          "$JAVA_HOME/bin/java" -version
           mkdir -p build
           godot --headless --verbose --path . --export-debug "Android" build/the-lost-kingdom.apk
 
