@@ -27,6 +27,26 @@ jobs:
           mkdir -p /root/.android
           keytool -genkeypair -v -keystore /root/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
 
+      - name: Configure Godot Android SDK settings
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+          ANDROID_HOME: /usr/lib/android-sdk
+        run: |
+          set -eux
+          mkdir -p "$HOME/.config/godot"
+          cat > "$HOME/.config/godot/editor_settings-4.3.tres" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/java_sdk_path = "$JAVA_HOME"
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          EOF
+          test -x "$JAVA_HOME/bin/java"
+          test -x "$ANDROID_HOME/platform-tools/adb"
+          test -d "$ANDROID_HOME/build-tools"
+          test -d "$ANDROID_HOME/platforms"
+          cat "$HOME/.config/godot/editor_settings-4.3.tres"
+
       - name: Export Android APK
         env:
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
