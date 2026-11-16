@@ -25,6 +25,11 @@ jobs:
             cp -a /root/.local/share/godot/export_templates/4.3.stable ~/.local/share/godot/export_templates/
           fi
 
+      - name: Create temporary Android debug keystore
+        run: |
+          mkdir -p /root/.android
+          keytool -genkeypair -v -keystore /root/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+
       - name: Export Android APK
         run: |
           mkdir -p build
