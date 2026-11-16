@@ -63,6 +63,13 @@ jobs:
           test -d "$ANDROID_HOME/build-tools"
           test -d "$ANDROID_HOME/platforms"
           cat "$HOME/.config/godot/editor_settings-4.3.tres"
+          echo "SDK package directories:"
+          find "$ANDROID_HOME/build-tools" -maxdepth 2 -type f | head -30
+          find "$ANDROID_HOME/platforms" -maxdepth 2 -type f | head -30
+          echo "Godot export validation:"
+          godot --headless --verbose --path . --editor --quit 2>&1 | tee /tmp/godot-editor-check.log
+          echo "Android related diagnostics:"
+          grep -Ei "android|sdk|ndk|cmake|keystore|error|warning" /tmp/godot-editor-check.log | tail -100 || true
 
       - name: Export Android APK
         env:
