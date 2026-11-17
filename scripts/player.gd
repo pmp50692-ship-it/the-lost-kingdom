@@ -95,6 +95,28 @@ func _build_character() -> void:
         trim.material_override = gold
         cape.add_child(trim)
 
+    # Sculpted royal clothing details: pleats, side panels and shoulder sash
+    for i in range(5):
+        var pleat := _box(self, Vector3(0.045, 0.54, 0.035), Vector3((float(i) - 2.0) * 0.105, 0.66, -0.255), cloth_light, "Dhoti_Pleat")
+        pleat.rotation.z = deg_to_rad((float(i) - 2.0) * 2.5)
+    for side in [-1.0, 1.0]:
+        _capsule(self, 0.075, 0.34, Vector3(side * 0.31, 0.72, 0.0), tunic, "Royal_Side_Cloth")
+        _box(torso, Vector3(0.07, 0.48, 0.075), Vector3(side * 0.29, 0.02, 0.255), gold, "Back_Armour_Edge")
+
+    # Gold clasp and embossed royal crest on the back of the cape
+    var cape_clasp := SphereMesh.new()
+    cape_clasp.radius = 0.105
+    cape_clasp.height = 0.12
+    _part(torso, cape_clasp, Vector3(0, 0.36, 0.315), gold, "Cape_Royal_Clasp")
+    var back_crest := CylinderMesh.new()
+    back_crest.top_radius = 0.11
+    back_crest.bottom_radius = 0.15
+    back_crest.height = 0.055
+    _part(cape, back_crest, Vector3(0, -0.12, 0.085), gold, "Cape_Back_Crest")
+    for side in [-1.0, 1.0]:
+        var cape_border := _box(cape, Vector3(0.045, 1.0, 0.035), Vector3(side * 0.40, -0.48, 0.085), gold, "Cape_Border")
+        cape_border.rotation.z = deg_to_rad(side * -3.0)
+
     # Head and ancient Indian royal crown
     _capsule(self, 0.22, 0.48, Vector3(0, 1.96, 0), skin, "Head")
     _capsule(self, 0.245, 0.22, Vector3(0, 2.20, 0.015), dark, "Hair")
