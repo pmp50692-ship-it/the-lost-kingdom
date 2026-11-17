@@ -231,7 +231,7 @@ func _build_environment() -> void:
         add_child(fountain_top)
 
     # Glimpse of the royal throne room through the entrance
-    _add_box(Vector3(0, 0.22, -34.5), Vector3(8.0, 0.35, 7.0), Color(0.38, 0.23, 0.15))
+    _add_box(Vector3(0, 0.02, -34.5), Vector3(8.0, 0.04, 7.0), Color(0.38, 0.23, 0.15))
     _add_box(Vector3(0, 0.45, -36.8), Vector3(4.2, 0.16, 2.8), Color(0.83, 0.59, 0.20))
     _add_box(Vector3(0, 1.25, -37.4), Vector3(2.0, 1.7, 0.75), Color(0.53, 0.12, 0.055))
     _add_box(Vector3(0, 2.2, -37.65), Vector3(2.1, 0.25, 0.95), Color(0.83, 0.59, 0.20))
