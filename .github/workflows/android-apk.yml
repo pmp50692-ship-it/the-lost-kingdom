@@ -71,6 +71,11 @@ jobs:
           echo "Android related diagnostics:"
           grep -Ei "android|sdk|ndk|cmake|keystore|error|warning" /tmp/godot-editor-check.log | tail -100 || true
 
+      - name: Test palace doorway traversal in headless Godot
+        run: |
+          set -eux
+          godot --headless --path . --script res://tests/palace_doorway_smoke.gd
+
       - name: Export Android APK
         env:
           JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
