@@ -137,24 +137,22 @@ func _build_environment() -> void:
     _add_box(Vector3(-7.1, 3.2, -30.75), Vector3(7.8, 6.4, 0.7), stone)
     _add_box(Vector3(7.1, 3.2, -30.75), Vector3(7.8, 6.4, 0.7), stone)
     _add_box(Vector3(0, 6.0, -30.75), Vector3(7.0, 1.0, 0.8), Color(0.83, 0.59, 0.20))
-    _add_box(Vector3(0, 2.15, -30.55), Vector3(4.6, 4.3, 0.35), dark_stone)
-    _add_box(Vector3(0, 2.05, -30.30), Vector3(3.5, 4.0, 0.12), Color(0.25, 0.10, 0.06))
     _add_box(Vector3(0, 4.25, -30.20), Vector3(5.2, 0.42, 0.35), Color(0.83, 0.59, 0.20))
     # Monumental carved royal doorway with two open golden door leaves
     _add_box(Vector3(-2.0, 2.05, -30.02), Vector3(0.16, 4.0, 0.22), Color(0.83, 0.59, 0.20))
     _add_box(Vector3(2.0, 2.05, -30.02), Vector3(0.16, 4.0, 0.22), Color(0.83, 0.59, 0.20))
     _add_box(Vector3(0, 4.12, -30.02), Vector3(4.2, 0.18, 0.25), Color(0.90, 0.68, 0.29))
-    _add_box(Vector3(-1.55, 2.0, -30.12), Vector3(0.82, 3.65, 0.10), Color(0.43, 0.12, 0.055))
-    _add_box(Vector3(1.55, 2.0, -30.12), Vector3(0.82, 3.65, 0.10), Color(0.43, 0.12, 0.055))
+    _add_box(Vector3(-1.92, 2.0, -30.12), Vector3(0.48, 3.65, 0.10), Color(0.43, 0.12, 0.055))
+    _add_box(Vector3(1.92, 2.0, -30.12), Vector3(0.48, 3.65, 0.10), Color(0.43, 0.12, 0.055))
     for side in [-1.0, 1.0]:
         for y in [0.8, 1.7, 2.6, 3.45]:
-            _add_box(Vector3(side * 1.55, y, -30.04), Vector3(0.58, 0.045, 0.035), Color(0.91, 0.69, 0.30))
+            _add_box(Vector3(side * 1.92, y, -30.04), Vector3(0.38, 0.045, 0.035), Color(0.91, 0.69, 0.30))
         var door_knob := MeshInstance3D.new()
         var knob_mesh := SphereMesh.new()
         knob_mesh.radius = 0.10
         knob_mesh.height = 0.10
         door_knob.mesh = knob_mesh
-        door_knob.position = Vector3(side * 1.35, 2.0, -29.94)
+        door_knob.position = Vector3(side * 1.78, 2.0, -29.94)
         door_knob.material_override = gold_material()
         add_child(door_knob)
 
