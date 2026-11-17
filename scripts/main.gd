@@ -314,7 +314,7 @@ func _build_royal_visual_polish() -> void:
     # Repeating carved-looking bands and inset panels on the palace facade.
     for side in [-1.0, 1.0]:
         for i in range(4):
-            var x := side * (4.0 + float(i) * 1.75)
+            var x: float = side * (4.0 + float(i) * 1.75)
             _add_box(Vector3(x, 2.8, -30.78), Vector3(1.18, 2.25, 0.055), dark_stone)
             _add_box(Vector3(x, 2.8, -30.84), Vector3(0.92, 1.95, 0.045), ivory)
             _add_box(Vector3(x, 2.8, -30.88), Vector3(0.72, 1.70, 0.035), red)
@@ -324,7 +324,7 @@ func _build_royal_visual_polish() -> void:
     # Decorative column flutes and ornate capitals around the forecourt.
     for side in [-1.0, 1.0]:
         for z in [-12.0, -15.0]:
-            var x := side * 5.0
+            var x: float = side * 5.0
             for band in range(3):
                 _add_box(Vector3(x + (float(band) - 1.0) * 0.28, 2.55, z - 0.60), Vector3(0.07, 3.1, 0.045), ivory)
             _add_box(Vector3(x, 4.92, z), Vector3(1.9, 0.10, 1.9), gold)
@@ -332,7 +332,7 @@ func _build_royal_visual_polish() -> void:
 
     # Red-and-gold royal banners beside the main stairs.
     for side in [-1.0, 1.0]:
-        var bx := side * 6.7
+        var bx: float = side * 6.7
         _add_box(Vector3(bx, 3.25, -10.8), Vector3(0.12, 5.4, 0.12), dark)
         _add_box(Vector3(bx - side * 0.65, 3.35, -10.82), Vector3(1.25, 1.85, 0.08), red)
         _add_box(Vector3(bx - side * 0.65, 4.30, -10.87), Vector3(1.22, 0.08, 0.05), gold)
@@ -344,17 +344,17 @@ func _build_royal_visual_polish() -> void:
 
     # Improve the market street with awnings, counters and colorful pottery.
     for side in [-1.0, 1.0]:
-        var sx := side * 12.0
+        var sx: float = side * 12.0
         _add_box(Vector3(sx, 2.72, -9.35), Vector3(6.1, 0.14, 2.3), red)
         for stripe in range(6):
-            var stripe_x := sx - 2.5 + float(stripe) * 1.0
+            var stripe_x: float = sx - 2.5 + float(stripe) * 1.0
             _add_box(Vector3(stripe_x, 2.81, -9.35), Vector3(0.45, 0.035, 2.28), ivory)
         _add_box(Vector3(sx, 1.0, -9.65), Vector3(4.9, 0.18, 0.85), dark)
         for pot_index in range(4):
             var pot := SphereMesh.new()
             pot.radius = 0.28
             pot.height = 0.48
-            var pot_x := sx - 1.65 + float(pot_index) * 1.1
+            var pot_x: float = sx - 1.65 + float(pot_index) * 1.1
             _decorative_mesh(pot, Vector3(pot_x, 0.42, -9.55), _material(Color(0.55, 0.22 + float(pot_index % 2) * 0.10, 0.10)))
             var rim := CylinderMesh.new()
             rim.top_radius = 0.16
@@ -366,7 +366,7 @@ func _build_royal_visual_polish() -> void:
     for side in [-1.0, 1.0]:
         for i in range(5):
             var z := -5.0 - float(i) * 7.0
-            var px := side * 5.9
+            var px: float = side * 5.9
             _add_box(Vector3(px, 0.32, z), Vector3(1.25, 0.55, 1.25), ivory)
             _add_box(Vector3(px, 0.62, z), Vector3(1.35, 0.12, 1.35), gold)
             var shrub := SphereMesh.new()
@@ -377,13 +377,13 @@ func _build_royal_visual_polish() -> void:
                 var flower := SphereMesh.new()
                 flower.radius = 0.12
                 flower.height = 0.12
-                var fx := px + (float(flower_i) - 1.0) * 0.30
+                var fx: float = px + (float(flower_i) - 1.0) * 0.30
                 _decorative_mesh(flower, Vector3(fx, 1.45, z - 0.12), _material(Color(0.82, 0.24 + float(flower_i) * 0.12, 0.12)))
 
     # More natural layered palace roofline with gold finials and parapet blocks.
     for side in [-1.0, 1.0]:
         for i in range(5):
-            var x := side * (3.0 + float(i) * 1.6)
+            var x: float = side * (3.0 + float(i) * 1.6)
             _add_box(Vector3(x, 6.35, -31.9), Vector3(0.95, 0.38, 1.15), ivory)
             _add_box(Vector3(x, 6.58, -31.9), Vector3(1.15, 0.10, 1.3), gold)
     for side in [-1.0, 1.0]:
