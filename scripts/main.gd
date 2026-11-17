@@ -103,13 +103,13 @@ func _build_environment() -> void:
     # Decorative column bases, capitals and gold inlay bands
     for side in [-1.0, 1.0]:
         for z_offset in [0.0, -3.0]:
-            var px := side * 5.0
-            var pz := -12.0 + z_offset
+            var px: float = side * 5.0
+            var pz: float = -12.0 + z_offset
             _add_box(Vector3(px, 0.35, pz), Vector3(1.8, 0.45, 1.8), dark_stone)
             _add_box(Vector3(px, 0.62, pz), Vector3(1.35, 0.16, 1.35), sandstone)
             _add_box(Vector3(px, 2.6, pz), Vector3(1.15, 3.9, 1.15), stone)
             _add_box(Vector3(px, 4.55, pz), Vector3(1.65, 0.32, 1.65), sandstone)
-            _add_box(Vector3(px, 4.78, pz), Vector3(1.35, 0.12, 1.35), gold_material())
+            _add_box(Vector3(px, 4.78, pz), Vector3(1.35, 0.12, 1.35), Color(0.83, 0.59, 0.20))
             _add_box(Vector3(px, 1.0, pz - 0.59), Vector3(0.9, 0.12, 0.08), sandstone)
     # Tall ceremonial side walls and royal banners
     _add_box(Vector3(-8.0, 1.8, -14.5), Vector3(1.0, 3.6, 8.0), dark_stone)
