@@ -125,6 +125,45 @@ func _build_character() -> void:
     _part(self, jewel, Vector3(0, 2.43, -0.225), ruby, "Crown_Front_Ruby")
     _box(self, Vector3(0.035, 0.16, 0.025), Vector3(0, 2.10, -0.224), ruby, "Royal_Tilak")
 
+    # Face details: eyes, brows, nose, moustache, beard and royal earrings
+    var eye_white := _mat(Color(0.92, 0.83, 0.68))
+    var eye_dark := _mat(Color(0.035, 0.018, 0.012))
+    var brow_mat := _mat(Color(0.075, 0.032, 0.018))
+    for side in [-1.0, 1.0]:
+        var eye := SphereMesh.new()
+        eye.radius = 0.034
+        eye.height = 0.045
+        _part(self, eye, Vector3(side * 0.082, 1.995, -0.196), eye_white, "Eye_White")
+        var pupil := SphereMesh.new()
+        pupil.radius = 0.018
+        pupil.height = 0.025
+        _part(self, pupil, Vector3(side * 0.082, 1.995, -0.225), eye_dark, "Eye_Pupil")
+        _box(self, Vector3(0.095, 0.025, 0.035), Vector3(side * 0.082, 2.055, -0.19), brow_mat, "Eyebrow")
+        var ear := SphereMesh.new()
+        ear.radius = 0.065
+        ear.height = 0.12
+        _part(self, ear, Vector3(side * 0.215, 1.96, 0), skin, "Ear")
+        var earring := SphereMesh.new()
+        earring.radius = 0.035
+        earring.height = 0.07
+        _part(self, earring, Vector3(side * 0.22, 1.88, -0.025), gold, "Royal_Earring")
+    var nose := SphereMesh.new()
+    nose.radius = 0.045
+    nose.height = 0.105
+    _part(self, nose, Vector3(0, 1.94, -0.215), skin, "Nose")
+    var moustache_left := SphereMesh.new()
+    moustache_left.radius = 0.075
+    moustache_left.height = 0.055
+    _part(self, moustache_left, Vector3(-0.065, 1.895, -0.215), brow_mat, "Moustache_Left")
+    var moustache_right := SphereMesh.new()
+    moustache_right.radius = 0.075
+    moustache_right.height = 0.055
+    _part(self, moustache_right, Vector3(0.065, 1.895, -0.215), brow_mat, "Moustache_Right")
+    var beard := SphereMesh.new()
+    beard.radius = 0.12
+    beard.height = 0.16
+    _part(self, beard, Vector3(0, 1.82, -0.115), brow_mat, "Short_Beard")
+
     # Royal chest ornaments and layered shoulder armour
     var necklace := TorusMesh.new()
     necklace.inner_radius = 0.105
