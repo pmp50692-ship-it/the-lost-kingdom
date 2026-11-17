@@ -87,7 +87,7 @@ func _build_environment() -> void:
     sun.directional_shadow_max_distance = 55.0
     add_child(sun)
 
-    var ground := _add_box(Vector3(0, -0.5, 0), Vector3(70, 1, 70), Color(0.25, 0.31, 0.18))
+    _add_box(Vector3(0, -0.5, 0), Vector3(100, 1, 100), Color(0.25, 0.31, 0.18))
     var stone := Color(0.58, 0.42, 0.27)
     var sandstone := Color(0.72, 0.56, 0.37)
     var dark_stone := Color(0.36, 0.24, 0.15)
@@ -116,6 +116,63 @@ func _build_environment() -> void:
     _add_box(Vector3(8.0, 1.8, -14.5), Vector3(1.0, 3.6, 8.0), dark_stone)
     _add_box(Vector3(-8.0, 3.8, -14.5), Vector3(1.3, 0.25, 8.4), sandstone)
     _add_box(Vector3(8.0, 3.8, -14.5), Vector3(1.3, 0.25, 8.4), sandstone)
+
+    # Royal city approach: broad sandstone avenue and ceremonial courtyard
+    _add_box(Vector3(0, 0.03, -22.0), Vector3(22, 0.16, 18), Color(0.61, 0.48, 0.34))
+    for side in [-1.0, 1.0]:
+        _add_box(Vector3(side * 10.6, 0.18, -22.0), Vector3(0.32, 0.22, 18), Color(0.82, 0.63, 0.30))
+        for j in range(5):
+            _add_box(Vector3(side * 9.2, 0.55, -15.0 - float(j) * 3.0), Vector3(0.55, 1.1, 0.55), sandstone)
+            _add_box(Vector3(side * 9.2, 1.16, -15.0 - float(j) * 3.0), Vector3(0.9, 0.18, 0.9), Color(0.83, 0.59, 0.20))
+
+    # Grand palace: wings, central audience hall and a tall ceremonial doorway
+    _add_box(Vector3(0, 2.8, -32.0), Vector3(22, 5.6, 2.2), sandstone)
+    _add_box(Vector3(-7.1, 3.2, -30.75), Vector3(7.8, 6.4, 0.7), stone)
+    _add_box(Vector3(7.1, 3.2, -30.75), Vector3(7.8, 6.4, 0.7), stone)
+    _add_box(Vector3(0, 6.0, -30.75), Vector3(7.0, 1.0, 0.8), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(0, 2.15, -30.55), Vector3(4.6, 4.3, 0.35), dark_stone)
+    _add_box(Vector3(0, 2.05, -30.30), Vector3(3.5, 4.0, 0.12), Color(0.25, 0.10, 0.06))
+    _add_box(Vector3(0, 4.25, -30.20), Vector3(5.2, 0.42, 0.35), Color(0.83, 0.59, 0.20))
+    # Palace balconies, cornices and repeating gold facade bands
+    _add_box(Vector3(0, 4.85, -30.45), Vector3(21, 0.28, 1.2), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(0, 5.65, -30.45), Vector3(23, 0.42, 2.0), sandstone)
+    _add_box(Vector3(0, 6.0, -30.45), Vector3(21.5, 0.16, 1.7), Color(0.83, 0.59, 0.20))
+    for side in [-1.0, 1.0]:
+        for j in range(4):
+            var balcony_x: float = side * (3.8 + float(j) * 1.65)
+            _add_box(Vector3(balcony_x, 3.5, -30.0), Vector3(0.22, 1.0, 0.25), Color(0.83, 0.59, 0.20))
+        # Palace corner towers
+        _add_box(Vector3(side * 10.0, 5.0, -32.0), Vector3(3.0, 10.0, 3.0), sandstone)
+        _add_box(Vector3(side * 10.0, 10.1, -32.0), Vector3(3.8, 0.55, 3.8), Color(0.83, 0.59, 0.20))
+        _add_box(Vector3(side * 10.0, 11.0, -32.0), Vector3(2.5, 1.5, 2.5), stone)
+        _add_box(Vector3(side * 10.0, 11.9, -32.0), Vector3(3.2, 0.25, 3.2), Color(0.83, 0.59, 0.20))
+    # Central royal dome and smaller roof pavilions
+    var dome := MeshInstance3D.new()
+    var dome_mesh := SphereMesh.new()
+    dome_mesh.radius = 3.0
+    dome_mesh.height = 3.8
+    dome.mesh = dome_mesh
+    dome.position = Vector3(0, 8.0, -32.0)
+    dome.material_override = _material(Color(0.68, 0.36, 0.16), 0.48, 0.25)
+    add_child(dome)
+    var finial := MeshInstance3D.new()
+    var finial_mesh := CylinderMesh.new()
+    finial_mesh.top_radius = 0.04
+    finial_mesh.bottom_radius = 0.16
+    finial_mesh.height = 1.25
+    finial.mesh = finial_mesh
+    finial.position = Vector3(0, 10.25, -32.0)
+    finial.material_override = gold_material()
+    add_child(finial)
+    # Royal flags at the palace entrance
+    for side in [-1.0, 1.0]:
+        _add_box(Vector3(side * 5.6, 7.3, -31.8), Vector3(0.12, 3.0, 0.12), Color(0.30, 0.18, 0.10))
+        _add_box(Vector3(side * 5.0, 7.0, -31.8), Vector3(1.1, 1.6, 0.08), Color(0.58, 0.035, 0.045))
+    # Low city walls and gatehouse framing the palace district
+    _add_box(Vector3(-15.0, 1.4, -24.0), Vector3(1.0, 2.8, 25.0), dark_stone)
+    _add_box(Vector3(15.0, 1.4, -24.0), Vector3(1.0, 2.8, 25.0), dark_stone)
+    _add_box(Vector3(-15.0, 2.9, -24.0), Vector3(1.4, 0.25, 25.5), sandstone)
+    _add_box(Vector3(15.0, 2.9, -24.0), Vector3(1.4, 0.25, 25.5), sandstone)
 
     for i in range(6):
         var x := -12.0 + float(i) * 4.8
