@@ -75,7 +75,11 @@ func _build_environment() -> void:
     environment.glow_strength = 0.7
     environment.ssao_enabled = true
     environment.ssao_radius = 2.0
-    environment.ssao_intensity = 1.1
+    environment.ssao_intensity = 0.85
+    environment.fog_enabled = true
+    environment.fog_light_color = Color(0.62, 0.70, 0.79)
+    environment.fog_density = 0.0018
+    environment.fog_sky_affect = 0.18
     world_env.environment = environment
     add_child(world_env)
 
@@ -294,6 +298,108 @@ func _build_environment() -> void:
         crown.position = Vector3(x, 3.5, z)
         crown.material_override = _material(Color(0.16, 0.31, 0.16))
         add_child(crown)
+
+    _build_level_one_details()
+
+func _decorative_mesh(mesh: Mesh, pos: Vector3, material: Material, parent: Node3D = null) -> MeshInstance3D:
+    var instance := MeshInstance3D.new()
+    instance.mesh = mesh
+    instance.position = pos
+    instance.material_override = material
+    if parent == null:
+        add_child(instance)
+    else:
+        parent.add_child(instance)
+    return instance
+
+func _build_palm_tree(pos: Vector3, scale_factor: float = 1.0) -> void:
+    var trunk := CylinderMesh.new()
+    trunk.top_radius = 0.22 * scale_factor
+    trunk.bottom_radius = 0.34 * scale_factor
+    trunk.height = 3.6 * scale_factor
+    _decorative_mesh(trunk, pos + Vector3(0, 1.8 * scale_factor, 0), _material(Color(0.34, 0.19, 0.09)))
+    for i in range(7):
+        var angle := TAU * float(i) / 7.0
+        var leaf := CapsuleMesh.new()
+        leaf.radius = 0.22 * scale_factor
+        leaf.height = 3.2 * scale_factor
+        var leaf_node := _decorative_mesh(leaf, pos + Vector3(cos(angle) * 1.0, 3.35 * scale_factor, sin(angle) * 1.0), _material(Color(0.12, 0.30 + float(i % 2) * 0.07, 0.15)))
+        leaf_node.rotation.z = deg_to_rad(-48)
+        leaf_node.rotation.y = -angle
+
+func _build_city_house(pos: Vector3, wall_color: Color, roof_color: Color, shop: bool = false) -> void:
+    var w := 5.5 if shop else 4.6
+    var h := 3.4 if shop else 3.0
+    _add_box(pos + Vector3(0, h * 0.5, 0), Vector3(w, h, 4.0), wall_color)
+    _add_box(pos + Vector3(0, h + 0.18, 0), Vector3(w + 0.7, 0.36, 4.4), roof_color)
+    _add_box(pos + Vector3(0, 1.15, -2.04), Vector3(1.35, 2.25, 0.12), Color(0.20, 0.085, 0.045))
+    _add_box(pos + Vector3(-1.65, 1.65, -2.10), Vector3(0.85, 0.72, 0.10), Color(0.18, 0.38, 0.43))
+    _add_box(pos + Vector3(1.65, 1.65, -2.10), Vector3(0.85, 0.72, 0.10), Color(0.18, 0.38, 0.43))
+    if shop:
+        _add_box(pos + Vector3(0, 2.55, -2.45), Vector3(5.8, 0.16, 1.0), Color(0.58, 0.055, 0.045))
+        for i in range(5):
+            _add_box(pos + Vector3(-2.0 + float(i) * 1.0, 2.2, -2.52), Vector3(0.06, 0.75, 0.06), Color(0.85, 0.67, 0.36))
+        _add_box(pos + Vector3(0, 0.95, -2.45), Vector3(4.6, 0.12, 0.75), Color(0.42, 0.22, 0.10))
+
+func _build_level_one_details() -> void:
+    var paving := Color(0.67, 0.55, 0.40)
+    var trim := Color(0.88, 0.68, 0.34)
+    # Broad royal road with stone edging and patterned paving slabs.
+    _add_box(Vector3(0, 0.025, -13.0), Vector3(8.0, 0.12, 42.0), paving)
+    for z_index in range(14):
+        var z := -1.0 - float(z_index) * 2.8
+        _add_box(Vector3(0, 0.105, z), Vector3(7.7, 0.035, 0.055), trim)
+    for side in [-1.0, 1.0]:
+        _add_box(Vector3(side * 4.15, 0.12, -13.0), Vector3(0.22, 0.20, 42.0), trim)
+        # Ornamental street lamps along the avenue.
+        for i in range(4):
+            var lamp_z := -4.0 - float(i) * 8.0
+            _add_box(Vector3(side * 5.2, 1.7, lamp_z), Vector3(0.18, 3.4, 0.18), dark_stone)
+            _add_box(Vector3(side * 5.2, 3.45, lamp_z), Vector3(0.9, 0.16, 0.9), trim)
+            var lantern := SphereMesh.new()
+            lantern.radius = 0.32
+            lantern.height = 0.48
+            var lantern_node := _decorative_mesh(lantern, Vector3(side * 5.2, 3.85, lamp_z), _material(Color(1.0, 0.62, 0.20), 0.25, 0.05))
+            lantern_node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
+    # Living royal capital: homes, market stalls and shaded courtyards.
+    _build_city_house(Vector3(-12.0, 0, -7.0), Color(0.66, 0.43, 0.27), Color(0.37, 0.18, 0.10), true)
+    _build_city_house(Vector3(12.0, 0, -7.0), Color(0.73, 0.57, 0.39), Color(0.45, 0.24, 0.13), true)
+    _build_city_house(Vector3(-13.0, 0, -19.0), Color(0.61, 0.48, 0.34), Color(0.32, 0.18, 0.11))
+    _build_city_house(Vector3(13.0, 0, -19.0), Color(0.72, 0.52, 0.34), Color(0.38, 0.20, 0.12))
+    _build_city_house(Vector3(-20.0, 0, -11.0), Color(0.62, 0.44, 0.30), Color(0.34, 0.19, 0.12))
+    _build_city_house(Vector3(20.0, 0, -11.0), Color(0.68, 0.50, 0.34), Color(0.38, 0.21, 0.12))
+
+    # Palm-lined outer gardens and distant rocky hills.
+    for i in range(8):
+        var px := -27.0 if i % 2 == 0 else 27.0
+        var pz := -2.0 - float(i) * 5.0
+        _build_palm_tree(Vector3(px, 0, pz), 0.8 + float(i % 3) * 0.12)
+    for i in range(7):
+        var hill := SphereMesh.new()
+        hill.radius = 8.0 + float(i % 3) * 2.0
+        hill.height = 7.0 + float(i % 2) * 2.0
+        var hx := -38.0 + float(i) * 12.5
+        var hz := -48.0 - float(i % 2) * 5.0
+        var hill_node := _decorative_mesh(hill, Vector3(hx, 1.0, hz), _material(Color(0.34, 0.29, 0.24)))
+        hill_node.scale = Vector3(1.5, 0.8, 1.0)
+
+    # A reflecting garden pool with a small pavilion beyond the palace.
+    _add_box(Vector3(0, 0.08, -44.0), Vector3(18.0, 0.16, 8.0), Color(0.34, 0.27, 0.20))
+    var pool := CylinderMesh.new()
+    pool.top_radius = 1.0
+    pool.bottom_radius = 1.0
+    pool.height = 0.08
+    var pool_node := _decorative_mesh(pool, Vector3(0, 0.22, -44.0), _material(Color(0.10, 0.35, 0.48), 0.12, 0.25))
+    pool_node.scale = Vector3(8.0, 1.0, 2.2)
+    for side in [-1.0, 1.0]:
+        _add_box(Vector3(side * 7.0, 1.3, -49.0), Vector3(0.45, 2.6, 0.45), sandstone)
+        _add_box(Vector3(side * 7.0, 2.7, -49.0), Vector3(1.1, 0.25, 1.1), trim)
+    # Royal banners and carved medallions at the city gate.
+    for side in [-1.0, 1.0]:
+        _add_box(Vector3(side * 17.0, 4.2, -4.0), Vector3(0.16, 8.4, 0.16), dark_stone)
+        _add_box(Vector3(side * 16.2, 6.5, -4.0), Vector3(1.5, 2.0, 0.10), Color(0.56, 0.035, 0.045))
+        _add_box(Vector3(side * 16.2, 7.65, -4.0), Vector3(1.7, 0.18, 0.12), trim)
 
 func _spawn_player() -> void:
     hero = PlayerScript.new()
