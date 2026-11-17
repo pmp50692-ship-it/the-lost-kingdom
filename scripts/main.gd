@@ -133,6 +133,109 @@ func _build_environment() -> void:
     _add_box(Vector3(0, 2.15, -30.55), Vector3(4.6, 4.3, 0.35), dark_stone)
     _add_box(Vector3(0, 2.05, -30.30), Vector3(3.5, 4.0, 0.12), Color(0.25, 0.10, 0.06))
     _add_box(Vector3(0, 4.25, -30.20), Vector3(5.2, 0.42, 0.35), Color(0.83, 0.59, 0.20))
+    # Monumental carved royal doorway with two open golden door leaves
+    _add_box(Vector3(-2.0, 2.05, -30.02), Vector3(0.16, 4.0, 0.22), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(2.0, 2.05, -30.02), Vector3(0.16, 4.0, 0.22), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(0, 4.12, -30.02), Vector3(4.2, 0.18, 0.25), Color(0.90, 0.68, 0.29))
+    _add_box(Vector3(-1.55, 2.0, -30.12), Vector3(0.82, 3.65, 0.10), Color(0.43, 0.12, 0.055))
+    _add_box(Vector3(1.55, 2.0, -30.12), Vector3(0.82, 3.65, 0.10), Color(0.43, 0.12, 0.055))
+    for side in [-1.0, 1.0]:
+        for y in [0.8, 1.7, 2.6, 3.45]:
+            _add_box(Vector3(side * 1.55, y, -30.04), Vector3(0.58, 0.045, 0.035), Color(0.91, 0.69, 0.30))
+        var door_knob := MeshInstance3D.new()
+        var knob_mesh := SphereMesh.new()
+        knob_mesh.radius = 0.10
+        knob_mesh.height = 0.10
+        door_knob.mesh = knob_mesh
+        door_knob.position = Vector3(side * 1.35, 2.0, -29.94)
+        door_knob.material_override = gold_material()
+        add_child(door_knob)
+
+    # Twin royal lion guardians on carved stone plinths
+    for side in [-1.0, 1.0]:
+        var lion_x: float = side * 6.7
+        _add_box(Vector3(lion_x, 0.35, -9.0), Vector3(2.0, 0.55, 2.0), dark_stone)
+        _add_box(Vector3(lion_x, 0.68, -9.0), Vector3(1.65, 0.16, 1.65), Color(0.83, 0.59, 0.20))
+        var lion_mane := MeshInstance3D.new()
+        var mane_mesh := SphereMesh.new()
+        mane_mesh.radius = 0.72
+        mane_mesh.height = 1.05
+        lion_mane.mesh = mane_mesh
+        lion_mane.position = Vector3(lion_x, 1.45, -9.0)
+        lion_mane.material_override = _material(Color(0.66, 0.39, 0.16))
+        add_child(lion_mane)
+        var lion_head := MeshInstance3D.new()
+        var head_mesh := SphereMesh.new()
+        head_mesh.radius = 0.43
+        head_mesh.height = 0.62
+        lion_head.mesh = head_mesh
+        lion_head.position = Vector3(lion_x, 1.82, -9.42)
+        lion_head.material_override = _material(Color(0.79, 0.55, 0.27))
+        add_child(lion_head)
+        for ear_side in [-1.0, 1.0]:
+            var ear := MeshInstance3D.new()
+            var ear_mesh := SphereMesh.new()
+            ear_mesh.radius = 0.16
+            ear_mesh.height = 0.20
+            ear.mesh = ear_mesh
+            ear.position = Vector3(lion_x + ear_side * 0.34, 2.12, -9.42)
+            ear.material_override = _material(Color(0.79, 0.55, 0.27))
+            add_child(ear)
+        var muzzle := MeshInstance3D.new()
+        var muzzle_mesh := SphereMesh.new()
+        muzzle_mesh.radius = 0.22
+        muzzle_mesh.height = 0.20
+        muzzle.mesh = muzzle_mesh
+        muzzle.position = Vector3(lion_x, 1.62, -9.80)
+        muzzle.material_override = _material(Color(0.91, 0.72, 0.43))
+        add_child(muzzle)
+        for leg_side in [-1.0, 1.0]:
+            _add_box(Vector3(lion_x + leg_side * 0.34, 0.98, -8.72), Vector3(0.24, 0.62, 0.28), Color(0.66, 0.39, 0.16))
+
+    # Twin ornamental fountains in the palace forecourt, leaving the central path clear
+    for side in [-1.0, 1.0]:
+        var fx: float = side * 7.2
+        _add_box(Vector3(fx, 0.18, -21.5), Vector3(3.2, 0.36, 3.2), dark_stone)
+        _add_box(Vector3(fx, 0.40, -21.5), Vector3(2.8, 0.16, 2.8), Color(0.83, 0.59, 0.20))
+        var basin := MeshInstance3D.new()
+        var basin_mesh := CylinderMesh.new()
+        basin_mesh.top_radius = 1.25
+        basin_mesh.bottom_radius = 1.05
+        basin_mesh.height = 0.48
+        basin.mesh = basin_mesh
+        basin.position = Vector3(fx, 0.70, -21.5)
+        basin.material_override = _material(Color(0.60, 0.48, 0.36))
+        add_child(basin)
+        var water := MeshInstance3D.new()
+        var water_mesh := CylinderMesh.new()
+        water_mesh.top_radius = 0.94
+        water_mesh.bottom_radius = 0.94
+        water_mesh.height = 0.06
+        water.mesh = water_mesh
+        water.position = Vector3(fx, 0.96, -21.5)
+        water.material_override = _material(Color(0.12, 0.48, 0.68), 0.18, 0.25)
+        add_child(water)
+        _add_box(Vector3(fx, 1.22, -21.5), Vector3(0.22, 0.62, 0.22), Color(0.83, 0.59, 0.20))
+        var fountain_top := MeshInstance3D.new()
+        var top_mesh := SphereMesh.new()
+        top_mesh.radius = 0.34
+        top_mesh.height = 0.52
+        fountain_top.mesh = top_mesh
+        fountain_top.position = Vector3(fx, 1.58, -21.5)
+        fountain_top.material_override = gold_material()
+        add_child(fountain_top)
+
+    # Glimpse of the royal throne room through the entrance
+    _add_box(Vector3(0, 0.22, -34.5), Vector3(8.0, 0.35, 7.0), Color(0.38, 0.23, 0.15))
+    _add_box(Vector3(0, 0.45, -36.8), Vector3(4.2, 0.16, 2.8), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(0, 1.25, -37.4), Vector3(2.0, 1.7, 0.75), Color(0.53, 0.12, 0.055))
+    _add_box(Vector3(0, 2.2, -37.65), Vector3(2.1, 0.25, 0.95), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(-0.82, 1.95, -37.45), Vector3(0.25, 1.0, 0.7), Color(0.83, 0.59, 0.20))
+    _add_box(Vector3(0.82, 1.95, -37.45), Vector3(0.25, 1.0, 0.7), Color(0.83, 0.59, 0.20))
+    for side in [-1.0, 1.0]:
+        _add_box(Vector3(side * 3.5, 2.2, -36.5), Vector3(0.22, 4.2, 0.22), Color(0.83, 0.59, 0.20))
+        _add_box(Vector3(side * 3.5, 4.25, -36.5), Vector3(0.8, 0.18, 0.8), sandstone)
+
     # Palace balconies, cornices and repeating gold facade bands
     _add_box(Vector3(0, 4.85, -30.45), Vector3(21, 0.28, 1.2), Color(0.83, 0.59, 0.20))
     _add_box(Vector3(0, 5.65, -30.45), Vector3(23, 0.42, 2.0), sandstone)
