@@ -33,5 +33,9 @@ func _run_test() -> void:
             quit(0)
             return
 
-    push_error("DOORWAY_TEST_FAIL: Hero was blocked at the palace entrance. Final z=%s" % hero.global_position.z)
+    var hit_info := "no collision details"
+    if hero.get_slide_collision_count() > 0:
+        var hit := hero.get_slide_collision(0)
+        hit_info = "collider=%s position=%s normal=%s" % [hit.get_collider().name, hit.get_position(), hit.get_normal()]
+    push_error("DOORWAY_TEST_FAIL: Hero was blocked at the palace entrance. Final z=%s %s" % [hero.global_position.z, hit_info])
     quit(1)
