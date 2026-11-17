@@ -95,20 +95,35 @@ func _build_character() -> void:
         trim.material_override = gold
         cape.add_child(trim)
 
-    # Head, hair, royal head wrap and forehead jewel
+    # Head and ancient Indian royal crown
     _capsule(self, 0.22, 0.48, Vector3(0, 1.96, 0), skin, "Head")
-    _capsule(self, 0.245, 0.22, Vector3(0, 2.20, 0.015), tunic, "Hair")
-    var turban := SphereMesh.new()
-    turban.radius = 0.29
-    turban.height = 0.28
-    _part(self, turban, Vector3(0, 2.27, 0), tunic, "Royal_Turban")
-    _box(self, Vector3(0.43, 0.07, 0.10), Vector3(0, 2.16, -0.20), gold, "Turban_Band")
-    _box(self, Vector3(0.12, 0.25, 0.08), Vector3(0.20, 2.22, 0.05), tunic, "Turban_Tail")
-    _box(self, Vector3(0.10, 0.20, 0.05), Vector3(0.22, 2.12, 0.06), gold, "Turban_Tail_Trim")
+    _capsule(self, 0.245, 0.22, Vector3(0, 2.20, 0.015), dark, "Hair")
+    _box(self, Vector3(0.48, 0.105, 0.40), Vector3(0, 2.20, 0), gold, "Royal_Crown_Base")
+    var crown_body := CylinderMesh.new()
+    crown_body.top_radius = 0.075
+    crown_body.bottom_radius = 0.235
+    crown_body.height = 0.43
+    _part(self, crown_body, Vector3(0, 2.45, 0), gold, "Royal_Crown")
+    var crown_rim := CylinderMesh.new()
+    crown_rim.top_radius = 0.19
+    crown_rim.bottom_radius = 0.19
+    crown_rim.height = 0.055
+    _part(self, crown_rim, Vector3(0, 2.25, 0), cloth_light, "Crown_Rim")
+    var crown_tip := SphereMesh.new()
+    crown_tip.radius = 0.085
+    crown_tip.height = 0.13
+    _part(self, crown_tip, Vector3(0, 2.69, 0), gold, "Crown_Finial")
+    for side in [-1.0, 1.0]:
+        var crown_gem := SphereMesh.new()
+        crown_gem.radius = 0.045
+        crown_gem.height = 0.07
+        _part(self, crown_gem, Vector3(side * 0.14, 2.40, -0.17), steel, "Crown_Side_Gem")
     var jewel := SphereMesh.new()
-    jewel.radius = 0.065
-    jewel.height = 0.10
-    _part(self, jewel, Vector3(0, 2.29, -0.275), gold, "Forehead_Jewel")
+    jewel.radius = 0.07
+    jewel.height = 0.11
+    var ruby := _mat(Color(0.72, 0.035, 0.045), 0.18)
+    _part(self, jewel, Vector3(0, 2.43, -0.225), ruby, "Crown_Front_Ruby")
+    _box(self, Vector3(0.035, 0.16, 0.025), Vector3(0, 2.10, -0.224), ruby, "Royal_Tilak")
 
     # Shoulder guards
     for side in [-1.0, 1.0]:
