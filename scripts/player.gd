@@ -12,6 +12,7 @@ var right_arm: Node3D
 var left_leg: Node3D
 var right_leg: Node3D
 var torso: Node3D
+var cape: Node3D
 var animation_clock := 0.0
 var is_attacking := false
 
@@ -55,15 +56,44 @@ func _build_character() -> void:
     var steel := _mat(Color(0.72, 0.81, 0.88), 0.8)
     var dark := _mat(Color(0.12, 0.055, 0.035))
 
-    # Dhoti and armored tunic
+    # Layered dhoti and royal warrior silhouette
     _capsule(self, 0.31, 0.78, Vector3(0, 0.73, 0), cloth_light, "Dhoti")
+    _box(self, Vector3(0.58, 0.58, 0.10), Vector3(0, 0.66, -0.19), tunic, "Front_Dhoti_Panel")
+    _box(self, Vector3(0.58, 0.56, 0.10), Vector3(0, 0.66, 0.19), tunic, "Back_Dhoti_Panel")
     torso = Node3D.new()
     torso.position.y = 1.30
     add_child(torso)
     _capsule(torso, 0.34, 0.88, Vector3(0, 0.05, 0), tunic, "Warrior_Tunic")
+    _box(torso, Vector3(0.48, 0.50, 0.09), Vector3(0, 0.07, -0.30), gold, "Chest_Armor")
+    _box(torso, Vector3(0.38, 0.39, 0.045), Vector3(0, 0.07, -0.36), tunic, "Chest_Cloth")
+    _box(torso, Vector3(0.045, 0.45, 0.025), Vector3(0, 0.06, -0.39), gold, "Armor_Center_Trim")
     _box(torso, Vector3(0.68, 0.12, 0.40), Vector3(0, -0.28, 0), gold, "Waist_Belt")
     _box(torso, Vector3(0.16, 0.24, 0.06), Vector3(0, -0.28, -0.22), leather, "Belt_Buckle")
     _box(torso, Vector3(0.20, 0.48, 0.05), Vector3(0, -0.58, -0.18), cloth_light, "Front_Sash")
+    for side in [-1.0, 1.0]:
+        _box(torso, Vector3(0.22, 0.52, 0.07), Vector3(side * 0.22, -0.56, -0.16), tunic, "Layered_Skirt")
+        _box(torso, Vector3(0.035, 0.46, 0.025), Vector3(side * 0.22, -0.56, -0.205), gold, "Skirt_Gold_Trim")
+
+    # Flowing red cape made from overlapping cloth panels
+    cape = Node3D.new()
+    cape.position = Vector3(0, 0.28, 0.27)
+    torso.add_child(cape)
+    for i in range(5):
+        var panel := BoxMesh.new()
+        panel.size = Vector3(0.19, 1.05 + float(i % 2) * 0.12, 0.045)
+        var strip := MeshInstance3D.new()
+        strip.mesh = panel
+        strip.position = Vector3((float(i) - 2.0) * 0.16, -0.48, 0.05)
+        strip.rotation.z = deg_to_rad((float(i) - 2.0) * 5.0)
+        strip.material_override = tunic
+        cape.add_child(strip)
+        var trim := MeshInstance3D.new()
+        var trim_mesh := BoxMesh.new()
+        trim_mesh.size = Vector3(0.035, 1.02, 0.025)
+        trim.mesh = trim_mesh
+        trim.position = strip.position + Vector3(0.075, 0, -0.03)
+        trim.material_override = gold
+        cape.add_child(trim)
 
     # Head, hair, royal head wrap and forehead jewel
     _capsule(self, 0.22, 0.48, Vector3(0, 1.96, 0), skin, "Head")
@@ -71,8 +101,10 @@ func _build_character() -> void:
     var turban := SphereMesh.new()
     turban.radius = 0.29
     turban.height = 0.28
-    _part(self, turban, Vector3(0, 2.27, 0), cloth_light, "Royal_Turban")
+    _part(self, turban, Vector3(0, 2.27, 0), tunic, "Royal_Turban")
     _box(self, Vector3(0.43, 0.07, 0.10), Vector3(0, 2.16, -0.20), gold, "Turban_Band")
+    _box(self, Vector3(0.12, 0.25, 0.08), Vector3(0.20, 2.22, 0.05), tunic, "Turban_Tail")
+    _box(self, Vector3(0.10, 0.20, 0.05), Vector3(0.22, 2.12, 0.06), gold, "Turban_Tail_Trim")
     var jewel := SphereMesh.new()
     jewel.radius = 0.065
     jewel.height = 0.10
@@ -91,11 +123,13 @@ func _build_character() -> void:
     add_child(left_arm)
     _capsule(left_arm, 0.105, 0.57, Vector3(0, -0.27, 0), tunic, "Left_Arm")
     _capsule(left_arm, 0.105, 0.20, Vector3(0, -0.55, 0), leather, "Left_Wrist")
+    _box(left_arm, Vector3(0.24, 0.20, 0.22), Vector3(0, -0.48, -0.04), gold, "Left_Bracer")
     right_arm = Node3D.new()
     right_arm.position = Vector3(0.39, 1.56, 0)
     add_child(right_arm)
     _capsule(right_arm, 0.105, 0.57, Vector3(0, -0.27, 0), tunic, "Right_Arm")
     _capsule(right_arm, 0.105, 0.20, Vector3(0, -0.55, 0), leather, "Right_Wrist")
+    _box(right_arm, Vector3(0.24, 0.20, 0.22), Vector3(0, -0.48, -0.04), gold, "Right_Bracer")
 
     # Legs with leather boots
     left_leg = Node3D.new()
@@ -148,12 +182,18 @@ func _process(delta: float) -> void:
         left_arm.rotation.x = -swing * 0.72
         right_arm.rotation.x = swing * 0.72
         torso.position.y = 1.30 + absf(sin(animation_clock * 20.0)) * 0.035
+        if is_instance_valid(cape):
+            cape.rotation.x = sin(animation_clock * 5.0) * 0.06
+            cape.rotation.z = sin(animation_clock * 3.0) * 0.045
     elif not is_attacking:
         left_leg.rotation.x = lerpf(left_leg.rotation.x, 0.0, delta * 8.0)
         right_leg.rotation.x = lerpf(right_leg.rotation.x, 0.0, delta * 8.0)
         left_arm.rotation.x = lerpf(left_arm.rotation.x, 0.0, delta * 8.0)
         right_arm.rotation.x = lerpf(right_arm.rotation.x, 0.0, delta * 8.0)
         torso.position.y = lerpf(torso.position.y, 1.30, delta * 8.0)
+        if is_instance_valid(cape):
+            cape.rotation.x = lerpf(cape.rotation.x, 0.0, delta * 3.0)
+            cape.rotation.z = lerpf(cape.rotation.z, 0.0, delta * 3.0)
 
 func _physics_process(delta: float) -> void:
     attack_cooldown = maxf(0.0, attack_cooldown - delta)
