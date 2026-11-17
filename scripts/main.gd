@@ -344,6 +344,8 @@ func _build_city_house(pos: Vector3, wall_color: Color, roof_color: Color, shop:
 func _build_level_one_details() -> void:
     var paving := Color(0.67, 0.55, 0.40)
     var trim := Color(0.88, 0.68, 0.34)
+    var sandstone := Color(0.72, 0.56, 0.37)
+    var dark_stone := Color(0.36, 0.24, 0.15)
     # Broad royal road with stone edging and patterned paving slabs.
     _add_box(Vector3(0, 0.025, -13.0), Vector3(8.0, 0.12, 42.0), paving)
     for z_index in range(14):
