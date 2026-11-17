@@ -130,7 +130,10 @@ func _build_environment() -> void:
             _add_box(Vector3(side * 9.2, 1.16, -15.0 - float(j) * 3.0), Vector3(0.9, 0.18, 0.9), Color(0.83, 0.59, 0.20))
 
     # Grand palace: wings, central audience hall and a tall ceremonial doorway
-    _add_box(Vector3(0, 2.8, -32.0), Vector3(22, 5.6, 2.2), sandstone)
+    # Split palace facade around a real, walkable central doorway.
+    _add_box(Vector3(-6.65, 2.8, -32.0), Vector3(8.7, 5.6, 2.2), sandstone)
+    _add_box(Vector3(6.65, 2.8, -32.0), Vector3(8.7, 5.6, 2.2), sandstone)
+    _add_box(Vector3(0, 5.05, -32.0), Vector3(4.6, 1.1, 2.2), sandstone)
     _add_box(Vector3(-7.1, 3.2, -30.75), Vector3(7.8, 6.4, 0.7), stone)
     _add_box(Vector3(7.1, 3.2, -30.75), Vector3(7.8, 6.4, 0.7), stone)
     _add_box(Vector3(0, 6.0, -30.75), Vector3(7.0, 1.0, 0.8), Color(0.83, 0.59, 0.20))
