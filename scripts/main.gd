@@ -24,13 +24,17 @@ func _add_key_action(action: String, key: Key) -> void:
     event.physical_keycode = key
     InputMap.action_add_event(action, event)
 
-func _material(color: Color) -> StandardMaterial3D:
+func _material(color: Color, roughness: float = 0.82, metallic: float = 0.0) -> StandardMaterial3D:
     var mat := StandardMaterial3D.new()
     mat.albedo_color = color
-    mat.roughness = 0.95
+    mat.roughness = roughness
+    mat.metallic = metallic
     return mat
 
-func _add_box(pos: Vector3, dimensions: Vector3, color: Color) -> void:
+func gold_material() -> StandardMaterial3D:
+    return _material(Color(0.83, 0.59, 0.20), 0.38, 0.55)
+
+func _add_box(pos: Vector3, dimensions: Vector3, color: Color) -> StaticBody3D:
     var body := StaticBody3D.new()
     body.position = pos
     add_child(body)
@@ -45,29 +49,73 @@ func _add_box(pos: Vector3, dimensions: Vector3, color: Color) -> void:
     shape.size = dimensions
     collision.shape = shape
     body.add_child(collision)
+    return body
 
 func _build_environment() -> void:
     var world_env := WorldEnvironment.new()
     var environment := Environment.new()
     environment.background_mode = Environment.BG_SKY
-    environment.sky = Sky.new()
-    environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-    environment.ambient_light_color = Color(0.65, 0.68, 0.75)
-    environment.ambient_light_energy = 0.7
+    var sky := Sky.new()
+    var sky_material := ProceduralSkyMaterial.new()
+    sky_material.sky_top_color = Color(0.10, 0.30, 0.62)
+    sky_material.sky_horizon_color = Color(0.72, 0.78, 0.88)
+    sky_material.ground_bottom_color = Color(0.12, 0.10, 0.09)
+    sky_material.ground_horizon_color = Color(0.48, 0.43, 0.35)
+    sky_material.sun_angle_max = 18.0
+    sky_material.sun_curve = 0.12
+    sky.sky_material = sky_material
+    environment.sky = sky
+    environment.background_mode = Environment.BG_SKY
+    environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+    environment.ambient_light_energy = 0.85
+    environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+    environment.tonemap_exposure = 1.0
+    environment.glow_enabled = true
+    environment.glow_intensity = 0.35
+    environment.glow_strength = 0.7
+    environment.ssao_enabled = true
+    environment.ssao_radius = 2.0
+    environment.ssao_intensity = 1.1
     world_env.environment = environment
     add_child(world_env)
 
     var sun := DirectionalLight3D.new()
     sun.rotation_degrees = Vector3(-48, -32, 0)
-    sun.light_energy = 1.25
+    sun.light_color = Color(1.0, 0.83, 0.62)
+    sun.light_energy = 1.45
+    sun.shadow_enabled = true
+    sun.directional_shadow_max_distance = 55.0
     add_child(sun)
 
-    _add_box(Vector3(0, -0.5, 0), Vector3(70, 1, 70), Color(0.32, 0.38, 0.22))
+    var ground := _add_box(Vector3(0, -0.5, 0), Vector3(70, 1, 70), Color(0.25, 0.31, 0.18))
     var stone := Color(0.58, 0.42, 0.27)
-    _add_box(Vector3(-5, 2, -12), Vector3(2, 4, 2), stone)
-    _add_box(Vector3(5, 2, -12), Vector3(2, 4, 2), stone)
-    _add_box(Vector3(0, 4.2, -12), Vector3(12, 1, 2), stone)
-    _add_box(Vector3(0, 0.25, -12), Vector3(8, 0.5, 2), Color(0.42, 0.29, 0.18))
+    var sandstone := Color(0.72, 0.56, 0.37)
+    var dark_stone := Color(0.36, 0.24, 0.15)
+    # Grand royal temple entrance with layered steps and carved-looking trim
+    _add_box(Vector3(0, 0.12, -9.5), Vector3(13, 0.28, 7), dark_stone)
+    for i in range(4):
+        _add_box(Vector3(0, 0.22 + float(i) * 0.20, -7.4 - float(i) * 0.72), Vector3(9.5 - float(i) * 0.8, 0.22, 1.1), sandstone)
+    _add_box(Vector3(-5, 2.3, -12), Vector3(1.25, 4.6, 1.25), stone)
+    _add_box(Vector3(5, 2.3, -12), Vector3(1.25, 4.6, 1.25), stone)
+    _add_box(Vector3(0, 4.6, -12), Vector3(12, 1.1, 2.0), sandstone)
+    _add_box(Vector3(0, 3.95, -12), Vector3(8.5, 0.18, 2.15), dark_stone)
+    _add_box(Vector3(0, 5.25, -12), Vector3(13, 0.35, 2.3), stone)
+    # Decorative column bases, capitals and gold inlay bands
+    for side in [-1.0, 1.0]:
+        for z_offset in [0.0, -3.0]:
+            var px := side * 5.0
+            var pz := -12.0 + z_offset
+            _add_box(Vector3(px, 0.35, pz), Vector3(1.8, 0.45, 1.8), dark_stone)
+            _add_box(Vector3(px, 0.62, pz), Vector3(1.35, 0.16, 1.35), sandstone)
+            _add_box(Vector3(px, 2.6, pz), Vector3(1.15, 3.9, 1.15), stone)
+            _add_box(Vector3(px, 4.55, pz), Vector3(1.65, 0.32, 1.65), sandstone)
+            _add_box(Vector3(px, 4.78, pz), Vector3(1.35, 0.12, 1.35), gold_material())
+            _add_box(Vector3(px, 1.0, pz - 0.59), Vector3(0.9, 0.12, 0.08), sandstone)
+    # Tall ceremonial side walls and royal banners
+    _add_box(Vector3(-8.0, 1.8, -14.5), Vector3(1.0, 3.6, 8.0), dark_stone)
+    _add_box(Vector3(8.0, 1.8, -14.5), Vector3(1.0, 3.6, 8.0), dark_stone)
+    _add_box(Vector3(-8.0, 3.8, -14.5), Vector3(1.3, 0.25, 8.4), sandstone)
+    _add_box(Vector3(8.0, 3.8, -14.5), Vector3(1.3, 0.25, 8.4), sandstone)
 
     for i in range(6):
         var x := -12.0 + float(i) * 4.8
