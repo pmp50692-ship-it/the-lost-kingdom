@@ -125,12 +125,25 @@ func _build_character() -> void:
     _part(self, jewel, Vector3(0, 2.43, -0.225), ruby, "Crown_Front_Ruby")
     _box(self, Vector3(0.035, 0.16, 0.025), Vector3(0, 2.10, -0.224), ruby, "Royal_Tilak")
 
-    # Shoulder guards
+    # Royal chest ornaments and layered shoulder armour
+    var necklace := TorusMesh.new()
+    necklace.inner_radius = 0.105
+    necklace.outer_radius = 0.135
+    _part(torso, necklace, Vector3(0, 0.37, -0.305), gold, "Royal_Necklace")
+    var chest_emblem := SphereMesh.new()
+    chest_emblem.radius = 0.085
+    chest_emblem.height = 0.12
+    _part(torso, chest_emblem, Vector3(0, 0.08, -0.405), ruby, "Royal_Chest_Gem")
     for side in [-1.0, 1.0]:
         var shoulder := SphereMesh.new()
         shoulder.radius = 0.20
         shoulder.height = 0.18
         _part(torso, shoulder, Vector3(side * 0.34, 0.29, 0), gold, "Shoulder_Guard")
+        var shoulder_trim := TorusMesh.new()
+        shoulder_trim.inner_radius = 0.145
+        shoulder_trim.outer_radius = 0.18
+        _part(torso, shoulder_trim, Vector3(side * 0.34, 0.29, -0.025), cloth_light, "Shoulder_Trim")
+        _box(torso, Vector3(0.055, 0.34, 0.045), Vector3(side * 0.29, -0.02, -0.335), gold, "Chest_Armour_Rivet")
 
     # Articulated arms
     left_arm = Node3D.new()
@@ -139,12 +152,14 @@ func _build_character() -> void:
     _capsule(left_arm, 0.105, 0.57, Vector3(0, -0.27, 0), tunic, "Left_Arm")
     _capsule(left_arm, 0.105, 0.20, Vector3(0, -0.55, 0), leather, "Left_Wrist")
     _box(left_arm, Vector3(0.24, 0.20, 0.22), Vector3(0, -0.48, -0.04), gold, "Left_Bracer")
+    _box(left_arm, Vector3(0.255, 0.045, 0.23), Vector3(0, -0.39, -0.045), cloth_light, "Left_Bracer_Edge")
     right_arm = Node3D.new()
     right_arm.position = Vector3(0.39, 1.56, 0)
     add_child(right_arm)
     _capsule(right_arm, 0.105, 0.57, Vector3(0, -0.27, 0), tunic, "Right_Arm")
     _capsule(right_arm, 0.105, 0.20, Vector3(0, -0.55, 0), leather, "Right_Wrist")
     _box(right_arm, Vector3(0.24, 0.20, 0.22), Vector3(0, -0.48, -0.04), gold, "Right_Bracer")
+    _box(right_arm, Vector3(0.255, 0.045, 0.23), Vector3(0, -0.39, -0.045), cloth_light, "Right_Bracer_Edge")
 
     # Legs with leather boots
     left_leg = Node3D.new()
