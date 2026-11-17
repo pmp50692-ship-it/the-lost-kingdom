@@ -305,11 +305,10 @@ func _build_environment() -> void:
 
 
 func _build_royal_visual_polish() -> void:
-    var ivory := _material(Color(0.88, 0.73, 0.52), 0.78)
-    var gold := gold_material()
-    var red := _material(Color(0.48, 0.035, 0.045), 0.68)
-    var teal := _material(Color(0.055, 0.24, 0.23), 0.58)
-    var dark := _material(Color(0.20, 0.12, 0.08), 0.9)
+    var ivory := Color(0.88, 0.73, 0.52)
+    var gold := Color(0.83, 0.59, 0.20)
+    var red := Color(0.48, 0.035, 0.045)
+        var dark := Color(0.20, 0.12, 0.08)
 
     # Repeating carved-looking bands and inset panels on the palace facade.
     for side in [-1.0, 1.0]:
@@ -318,7 +317,7 @@ func _build_royal_visual_polish() -> void:
             _add_box(Vector3(x, 2.8, -30.78), Vector3(1.18, 2.25, 0.055), dark_stone)
             _add_box(Vector3(x, 2.8, -30.84), Vector3(0.92, 1.95, 0.045), ivory)
             _add_box(Vector3(x, 2.8, -30.88), Vector3(0.72, 1.70, 0.035), red)
-            _add_box(Vector3(x, 3.78, -30.91), Vector3(0.78, 0.07, 0.04), gold)
+            _add_box(Vector3(x, 3.78, -30.91), Vector3(0.78, 0.07, 0.04), gold_material())
             _add_box(Vector3(x, 1.82, -30.91), Vector3(0.78, 0.07, 0.04), gold)
 
     # Decorative column flutes and ornate capitals around the forecourt.
@@ -340,7 +339,7 @@ func _build_royal_visual_polish() -> void:
         var emblem := SphereMesh.new()
         emblem.radius = 0.22
         emblem.height = 0.12
-        _decorative_mesh(emblem, Vector3(bx - side * 0.65, 3.35, -10.94), gold)
+        _decorative_mesh(emblem, Vector3(bx - side * 0.65, 3.35, -10.94), gold_material())
 
     # Improve the market street with awnings, counters and colorful pottery.
     for side in [-1.0, 1.0]:
