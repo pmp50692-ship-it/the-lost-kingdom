@@ -308,7 +308,8 @@ func _build_royal_visual_polish() -> void:
     var ivory := Color(0.88, 0.73, 0.52)
     var gold := Color(0.83, 0.59, 0.20)
     var red := Color(0.48, 0.035, 0.045)
-        var dark := Color(0.20, 0.12, 0.08)
+    var dark := Color(0.20, 0.12, 0.08)
+    var dark_stone := Color(0.36, 0.24, 0.15)
 
     # Repeating carved-looking bands and inset panels on the palace facade.
     for side in [-1.0, 1.0]:
@@ -317,7 +318,7 @@ func _build_royal_visual_polish() -> void:
             _add_box(Vector3(x, 2.8, -30.78), Vector3(1.18, 2.25, 0.055), dark_stone)
             _add_box(Vector3(x, 2.8, -30.84), Vector3(0.92, 1.95, 0.045), ivory)
             _add_box(Vector3(x, 2.8, -30.88), Vector3(0.72, 1.70, 0.035), red)
-            _add_box(Vector3(x, 3.78, -30.91), Vector3(0.78, 0.07, 0.04), gold_material())
+            _add_box(Vector3(x, 3.78, -30.91), Vector3(0.78, 0.07, 0.04), gold)
             _add_box(Vector3(x, 1.82, -30.91), Vector3(0.78, 0.07, 0.04), gold)
 
     # Decorative column flutes and ornate capitals around the forecourt.
@@ -359,7 +360,7 @@ func _build_royal_visual_polish() -> void:
             rim.top_radius = 0.16
             rim.bottom_radius = 0.20
             rim.height = 0.07
-            _decorative_mesh(rim, Vector3(pot_x, 0.66, -9.55), gold)
+            _decorative_mesh(rim, Vector3(pot_x, 0.66, -9.55), gold_material())
 
     # Stone planters, shrubs and flowers along the royal road.
     for side in [-1.0, 1.0]:
@@ -389,7 +390,7 @@ func _build_royal_visual_polish() -> void:
         var finial_mesh := SphereMesh.new()
         finial_mesh.radius = 0.28
         finial_mesh.height = 0.52
-        _decorative_mesh(finial_mesh, Vector3(side * 10.0, 12.0, -32.0), gold)
+        _decorative_mesh(finial_mesh, Vector3(side * 10.0, 12.0, -32.0), gold_material())
 
 func _decorative_mesh(mesh: Mesh, pos: Vector3, material: Material, parent: Node3D = null) -> MeshInstance3D:
     var instance := MeshInstance3D.new()
