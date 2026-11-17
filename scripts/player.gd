@@ -163,6 +163,9 @@ func _build_camera() -> void:
     camera_pivot = Node3D.new()
     camera_pivot.position = Vector3(0, 1.55, 0)
     add_child(camera_pivot)
+    # Keep camera yaw independent from the warrior so movement input cannot rotate in circles.
+    camera_pivot.top_level = true
+    camera_pivot.global_position = global_position + Vector3(0, 1.55, 0)
     var spring := SpringArm3D.new()
     spring.spring_length = 5.5
     spring.margin = 0.2
@@ -196,6 +199,8 @@ func _process(delta: float) -> void:
             cape.rotation.z = lerpf(cape.rotation.z, 0.0, delta * 3.0)
 
 func _physics_process(delta: float) -> void:
+    if is_instance_valid(camera_pivot):
+        camera_pivot.global_position = global_position + Vector3(0, 1.55, 0)
     attack_cooldown = maxf(0.0, attack_cooldown - delta)
     if not is_on_floor():
         velocity.y -= gravity * delta
@@ -217,7 +222,8 @@ func _physics_process(delta: float) -> void:
     if direction.length() > 0.05:
         velocity.x = direction.x * move_speed
         velocity.z = direction.z * move_speed
-        look_at(global_position + direction, Vector3.UP)
+        var target_yaw := atan2(-direction.x, -direction.z)
+        rotation.y = rotate_toward(rotation.y, target_yaw, 8.0 * delta)
     else:
         velocity.x = move_toward(velocity.x, 0.0, move_speed * 5.0 * delta)
         velocity.z = move_toward(velocity.z, 0.0, move_speed * 5.0 * delta)
